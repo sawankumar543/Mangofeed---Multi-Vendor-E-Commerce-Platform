@@ -1,5 +1,5 @@
 import User from "../models/auth.model.js";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from "../config/config.js";
 
@@ -69,10 +69,13 @@ export const loginUser = async (req, res) => {
         if(!email || !password) {
             return res.status(400).json({ message: "Please add email and password!"})
         }
-
         // 2. User ko email se dhundhna
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email});
         
+          // 🚨 PEHLE CHECK KAREIN: Agar user nahi mila, toh turant invalid return kar dein
+        if (!user) {
+            return res.status(401).json({ success: false, message: 'Invalid email or password' });
+        }
          // JWT Token generate karein (user id se)
         const token = jwt.sign({id: user._id.toString() }, config.JWT_SECRET, {
             expiresIn:'7d'
@@ -94,7 +97,7 @@ export const loginUser = async (req, res) => {
                 },
             })
         } else {
-             // Security reason ke liye hum exact nahi batate ki password galat hai ya email
+             // Security reason ke liye hum exact nahi batate ki password galat hai ya email    
             return res.status(401).json({ message: 'Invalid email and password'})
         }
     } catch(error) {

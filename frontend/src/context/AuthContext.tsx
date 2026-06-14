@@ -26,9 +26,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         checkAuthStatus();
     }, []);
     const login = (userData: UserProfile) => setUser(userData);
-    const logout = () => {
-        // Backend logout route ko hit karein jo cookie clear karega
-        setUser(null)
+    const logout =  async () => {
+         try {
+    // 1. Backend ke logout API ko hit karein taaki cookie clear ho sake
+    // withCredentials true rakhna zaroori hai taaki cookie remove ho sake
+    await axios.post('/user/logout', {}, { withCredentials: true });
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    // 2. Global state ko null karein (chahe API fail ho ya pass, frontend se user hatna chahiye)
+    setUser(null);
+    alert("Logged out successfully! 👋");
+  }
     }
     return (
         <AuthContext.Provider value={{ user, loading, login, logout}}> 
