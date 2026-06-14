@@ -3,11 +3,25 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dns from 'node:dns/promises';
+import router from './routes/auth.routes.js';
 // configure custom DNS server globally for resolve operations
 dns.setServers(['1.1.1.1', '8.8.8.8'])
 
 // Make application
 const app = express()
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
+app.use((err, req, res, next) => {
+  if(err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({
+      message: "Glat Json format hai! Please valid Json Bheje"
+    })
+  }
+})
+
+// api
+app.use('/auth', router)
 
 // Print current mode
 console.log("Current NODE_ENV is:", process.env.NODE_ENV);

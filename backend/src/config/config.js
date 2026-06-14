@@ -7,7 +7,8 @@ if(!process.env.PORT) {
 const config = {
     PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
-    DB_URL: process.env.DB_URL
+    DB_URL: process.env.DB_URL,
+    JWT_SECRET: process.env.JWT_SECRET,
 }
 
 export default config
