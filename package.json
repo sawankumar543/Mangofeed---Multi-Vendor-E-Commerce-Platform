@@ -7,10 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "install-all": "npm install --prefix backend && npm install --prefix frontend",
-    "build-frontend": "npm run build --prefix frontend",
+    "install-all": "npm install --prefix backend && npm install --prefix client",
+    "build-client": "npm run build --prefix client",
     "start-backend": "npm start --prefix backend",
-    "render-postbuild": "npm run install-all && npm run build-frontend",
+    "render-postbuild": "npm run install-all && npm run build-client",
     "start-production": "set NODE_ENV=production && npm start --prefix backend"
   },
   "keywords": [],

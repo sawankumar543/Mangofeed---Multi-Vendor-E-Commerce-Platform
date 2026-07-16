@@ -1,12 +1,16 @@
-import 'dotenv/config'; // Sabse upar hona chahiye
-import express from 'express';
-import path from 'path';
+import express from "express";
+import path from "path";
 import { fileURLToPath } from 'url';
 import dns from 'node:dns/promises';
+import morgan from "morgan";
+import helmet from "helmet";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import compression from "compression";
+
 import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import config from "../config.config.js"
 
 
 // configure custom DNS server globally for resolve operations
@@ -15,15 +19,17 @@ dns.setServers(['1.1.1.1', '8.8.8.8'])
 // Make application
 const app = express()
 
+// middlewares
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); // JWT cookies ko read karne ke liye.
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: config.CLIENT_URL,
     credentials: true,
   })
 );
-app.use(express.urlencoded({ extended: true}))
+app.use(express.urlencoded({ extended: true})); // Ye HTML forms ke data ko parse karta hai.
+
 app.use((err, req, res, next) => {
   if(err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     return res.status(400).json({
