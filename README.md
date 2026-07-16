@@ -19,8 +19,25 @@ MangoFeed is a fruit marketplace where users can:
 ## Tech Stack
 
 Frontend:
-- React
+React 19
 - TypeScript
+- Vite
+- React Router DOM
+- Redux Toolkit
+- RTK Query
+- React Hook Form
+- Zod
+- Tailwind CSS
+- Axios
+- TanStack Table
+- React Hot Toast
+- Framer Motion
+- React Helmet Async
+- React Query (agar RTK Query use nahi karna ho)
+- Lucide React
+- React Dropzone
+- Recharts
+- React Loading Skeleton
 
 Backend:
 - Node.js
