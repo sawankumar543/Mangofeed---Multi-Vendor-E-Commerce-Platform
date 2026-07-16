@@ -41,8 +41,23 @@ React 19
 
 Backend:
 - Node.js
-- Express
+- Express.js
 - JavaScript
+- MongoDB
+- Mongoose
+- JWT   
+- Cookie Parser
+- bcrypt
+- Nodemailer
+- Multer
+- Cloudinary
+- Express Validator ya Zod
+- Helmet
+- Morgan
+- Compression
+- CORS
+- Express Rate Limit
+- dotenv
 
 Database:
 - MongoDB
