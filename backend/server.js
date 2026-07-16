@@ -1,6 +1,3 @@
-import 'dotenv/config'; // Sabse upar hona chahiye
-config()
-
 import app from './src/app.js';
 import config from './src/config/config.js';
 import connectDatabase from './src/database/connection.js';

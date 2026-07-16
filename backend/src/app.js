@@ -10,7 +10,10 @@ import compression from "compression";
 
 import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
-import config from "../config.config.js"
+import config from "../src/config/config.js"
+import routes from "./routes/index.js";
+import errorHandler from "./middleware/error.middleware.js";
+import ApiError from "./utils/ApiError.js";
 
 
 // configure custom DNS server globally for resolve operations
@@ -22,6 +25,9 @@ const app = express()
 // middlewares
 app.use(express.json());
 app.use(cookieParser()); // JWT cookies ko read karne ke liye.
+app.use(morgan("dev"));
+app.use(helmet());
+app.use(compression());
 app.use(
   cors({
     origin: config.CLIENT_URL,
@@ -38,11 +44,11 @@ app.use((err, req, res, next) => {
   }
 })
 
-// api auth
-app.use('/auth', authRouter)
-
-// user profile
-app.use('/user', userRouter)
+app.use("/api/v1", routes);
+app.use((req, res, next) => {
+  new ApiError(404, "Route Not Found")
+});
+app.use(errorHandler);
 
 // Print current mode
 console.log("Current NODE_ENV is:", process.env.NODE_ENV);
