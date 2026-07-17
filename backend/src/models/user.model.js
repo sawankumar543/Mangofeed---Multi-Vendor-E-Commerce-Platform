@@ -91,10 +91,17 @@ const userSchema = new Schema(
         },
     },
     {
-        timestamps: true
+        timestamps: true,
+        versionKey: false,
     }
 );  
 
+// Indexes
+userSchema.index({ roles: 1 });
+
+userSchema.index({ status: 1 });
+
+// Pre hook
 const saltRounds = Number(config.BCRYPT_SALT_ROUNDS || 12);
 
 userSchema.pre("save", async function(next) {
@@ -103,7 +110,7 @@ userSchema.pre("save", async function(next) {
     next()
 });
 
-
+// Instance Methods
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
@@ -126,3 +133,9 @@ userSchema.methods.generateRefreshToken = async function () {
         expiresIn: config.REFRESH_TOKEN_EXPIRES_IN,
     })
 }
+
+// Model
+
+const User = model("User", userSchema);
+
+export default User;
