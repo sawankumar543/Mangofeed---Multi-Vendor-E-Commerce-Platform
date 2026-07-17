@@ -8,15 +8,12 @@ const validate = (schema) => {
                 field: issue.path.join("."),
                 message: issue.message,
             }));
-
             return next(
                 new ApiError(400, "Validation failed", errors)
             )
         }
         req.body = result.data;
-
         next();
     }
 }
-
 export default validate;

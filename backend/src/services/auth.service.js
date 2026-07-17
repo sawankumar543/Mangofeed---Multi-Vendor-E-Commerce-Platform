@@ -8,11 +8,11 @@ class authService {
         const user = await this.createUser(userData);
         this.attachEmailVerificationToken(user);
         await user.save();
-        return user;
+        return user._id;
     }
 
     // Methods that help registerUser
-    async ensureUniqueUser(userData) {
+    async #ensureUniqueUser(userData) {
         const { email, username } = userData;
         const existingUser = await User.findOne({
             $or: [
@@ -29,12 +29,14 @@ class authService {
             }
         }
     }
-    async createUser(userData) {
+    async #createUser(userData) {
       return new User(userData);
     }
-    attachEmailVerificationToken(user) {
-        user.emailVerificationToken = generateEmailVerificationToken();
+    #attachEmailVerificationToken(user) {
+        const token = generateEmailVerificationToken();
+        user.emailVerificationToken = token;
         user.emailVerificationExpires = new Date(Date.now() + 15 * 60 * 1000)
+        return token
     }
 }
 
