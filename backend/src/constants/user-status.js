@@ -1,0 +1,7 @@
+export const USER_STATUS = Object.freeze({
+    ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
+    SUSPENDED: "SUSPENDED",
+    BLOCKED: "BLOCKED",
+    DELETED: "DELETED",
+})

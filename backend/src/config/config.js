@@ -8,8 +8,8 @@ const config = {
     PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
     DB_URL: process.env.MONGODB_URI,
-    JWT_SECRET: process.env.JWT_SECRET,
     CLIENT_URL: process.env.CLIENT_URL,
+    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS,
 }
 
 export default config
