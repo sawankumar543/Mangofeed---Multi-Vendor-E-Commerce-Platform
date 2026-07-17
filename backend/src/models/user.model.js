@@ -119,3 +119,10 @@ userSchema.methods.generateAccessToken = async function() {
     });
 }
 
+userSchema.methods.generateRefreshToken = async function () {
+    return jwt.sign({
+        id: this._id
+    }, config.JWT_REFRESH_SECRET, {
+        expiresIn: config.REFRESH_TOKEN_EXPIRES_IN,
+    })
+}
