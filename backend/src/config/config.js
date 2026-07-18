@@ -14,6 +14,12 @@ const config = {
     ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASS: process.env.SMTP_PASS,
+    MAIL_FROM: process.env.MAIL_FROM,
+    FRONTEND_URL: process.env.FRONTEND_URL,
 }
 
 export default config

@@ -1,13 +1,20 @@
 import { generateEmailVerificationToken } from "../lib/token.js";
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
+import mailService from "./mail.service.js";
 
-class authService {
+
+class AuthService {
     async registerUser(userData) {
         await this.ensureUniqueUser(userData);
         const user = await this.createUser(userData);
-        this.attachEmailVerificationToken(user);
+        const token = this.attachEmailVerificationToken(user);
         await user.save();
+        try {
+            await mailService.sendVerificationEmail(user, token);
+        } catch (error) {
+            console.error(error)
+        }
         return user._id;
     }
 
@@ -40,4 +47,4 @@ class authService {
     }
 }
 
-export default new authService();
+export default new AuthService();
