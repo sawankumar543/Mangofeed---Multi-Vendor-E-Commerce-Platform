@@ -1,6 +1,7 @@
 import { generateEmailVerificationToken } from "../lib/token.js";
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import mailService from "./mail.service.js";
 
 
@@ -45,6 +46,33 @@ class AuthService {
         user.emailVerificationExpires = new Date(Date.now() + 15 * 60 * 1000)
         return token
     }
+    // Methods that help registerUser Ends Here
+
+    // Verify Email Method
+    async verifyEmail(token) {
+        if(!token) {
+            throw new ApiError(400, "Token not found")
+        }
+        const user = await User.findOne({
+            emailVerificationToken: token,
+        });
+        if(!user) {
+            throw new ApiError(404, "Invalid verification token");
+        }
+        if(user.isEmailVerified) {
+            throw new ApiError(409, "Email already verified")
+        }
+        if(user.emailVerificationExpires < Date.now()) {
+            return new ApiError(400, "Verification token has expired")
+        }
+        user.isEmailVerified = true;
+        user.emailVerificationToken = null;
+        user.emailVerificationExpires = null;
+
+        await user.save();
+        return user;
+    }
+    
 }
 
 export default new AuthService();
