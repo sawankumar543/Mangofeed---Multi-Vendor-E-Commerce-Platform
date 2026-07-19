@@ -90,6 +90,53 @@ class AuthService {
         }
         return user;
     }
+
+    async loginUser(loginData) {
+        // Extract identifier and password
+        const { identifier, password } = loginData;
+        // find user
+        const user = await User.findOne({
+            $or: [
+                { email: identifier },
+                { username: identifier }
+            ]
+        })
+        // if user not found
+        if(!user) {
+            throw new ApiError(401, "Invalid credentials")
+        }
+        const isPasswordValid = await user.isPasswordCorrect(password);
+        // If password is not valid
+        if (!isPasswordValid) {
+            throw new ApiError(401, "Invalid credentials")
+        }
+        // is email Verified
+        if(!user.isEmailVerified) {
+            throw new ApiError(403, "Please verify your email first.")
+        }
+        const { accessToken, refreshToken  } = await this.generateAuthTokens(user);
+
+        return {
+            accessToken,
+            refreshToken, 
+            user
+        }
+    }
+    async generateAuthTokens(user) {
+        // generate access token
+        const accessToken = await user.generateAccessToken();
+        // generate refresh token
+        const refreshToken = await user.generateRefreshToken();
+
+        // save token to db
+        user.refreshToken = refreshToken;
+        
+        await user.save();
+        return {
+            accessToken, 
+            refreshToken
+        }
+    }
     
 }
 

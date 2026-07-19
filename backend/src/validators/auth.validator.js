@@ -38,4 +38,16 @@ export const resendVerificationEmailSchema = z.object({
         .toLowerCase()
         .nonempty()
         .email({error: "Please enter a valid email address"})
+});
+
+export const loginSchema = z.object({
+    identifier: z
+        .string()
+        .trim()
+        .nonempty("Identifier is required")
+        .min(3, "Identifier must be at least 3 characters"),
+    password: z
+            .string()
+            .trim()
+            .nonempty("Password is required")
 })
