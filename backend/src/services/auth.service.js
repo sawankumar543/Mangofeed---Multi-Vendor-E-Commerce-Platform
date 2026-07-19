@@ -1,3 +1,4 @@
+import { it } from "zod/locales";
 import { generateEmailVerificationToken } from "../lib/token.js";
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
@@ -137,7 +138,27 @@ class AuthService {
             refreshToken
         }
     }
-    
+
+    // Logout method
+    async logoutUser(refreshToken) {
+        // check refresh token
+        if (!refreshToken) {
+            throw new ApiError(400, "Refresh token is required");
+        }
+        const user = await User.findOne({
+            refreshToken
+        })
+        if(!user) {
+            throw new ApiError(401, "Invalid refresh token");
+        }
+        user.refreshToken = null;
+
+        await user.save();
+
+        return {
+            message: "Logged out successfully"
+        }
+    }
 }
 
 export default new AuthService();

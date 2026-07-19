@@ -37,12 +37,25 @@ class AuthController {
     })
     login = asyncHandler(async (req, res) => {
         const { user, refreshToken, accessToken } =  await loginUser(req.body);
-        res.cookie("accessToken", accessToken)
-        res.cookie("refreshToken", refreshToken)
+        res.cookie("accessToken", accessToken, cookieOptions)
+        res.cookie("refreshToken", refreshToken, cookieOptions)
 
         return res.status(200).json(
             new ApiResponse(200, "Login successful", user)
         )
+    })
+    logout = asyncHandler(async (req, res) => {
+        const { refreshToken } = req.cookies;
+
+        await authService.logoutUser(refreshToken);
+
+        return res
+            .clearCookie("accessToken", cookieOptions)
+            .clearCookie("refreshToken", cookieOptions)
+            .status(200)
+            .json(
+                new ApiResponse(200, "Logout successful")
+        );
     })
 }
 
