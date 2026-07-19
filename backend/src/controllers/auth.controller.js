@@ -20,6 +20,8 @@ class AuthController {
             new ApiResponse(200, "Email has been verified successfully", user)
         )
     });
+
+    
 }
 
 export default new AuthController

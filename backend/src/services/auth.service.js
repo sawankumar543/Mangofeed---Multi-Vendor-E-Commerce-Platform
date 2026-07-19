@@ -72,7 +72,24 @@ class AuthService {
         await user.save();
         return user;
     }
-    
+
+    async resendVerificationEmail(email) {
+        const user = await User.findOne({ email });
+        if(!user) {
+            throw new ApiError(404, "User not found")
+        }
+        if(user.isEmailVerified) {
+            throw new ApiError(409, "Email is already verified")
+        }
+        const token = this.attachEmailVerificationToken(user);
+        await user.save()
+        try {
+            await mailService.sendVerificationEmail(user, token)
+        } catch (error) {
+            console.error("Failed to send verification email:", error);
+        }
+        return user;
+    }
     
 }
 
